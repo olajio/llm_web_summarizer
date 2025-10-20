@@ -142,7 +142,7 @@ def messages_for(url_content):
     ]
 
 # Fetches website content and generates AI-powered summary
-def summarize(url):
+def summarize(url, client):
     url_content = fetch_website_contents(url)
     response = client.chat.completions.create(
         model=MODEL_NAME,
@@ -152,7 +152,7 @@ def summarize(url):
 
 # Generates and displays website summary in formatted Markdown
 def display_summary(url):
-    summary = summarize(url)
+    summary = summarize(url, client)
     display(Markdown(summary))
 
 # ============================================================================
@@ -160,15 +160,14 @@ def display_summary(url):
 # ============================================================================
 if __name__ == "__main__":
     # Get URL input from user
-    url = input("Enter url or website address. The address you be in the format url.doman. For example, cnn.com :")
+    url = input("Enter url or website address. For example, cnn.com :")
     
     # Add https:// prefix if not already present
-    url = f"https://{url}"
+    if not url.startswith(('http://', 'https://')):
+        url = f"https://{url}"
     
     # Display confirmation to user
-    print("")
-    print(f"You entered {url}")
-    print("")
+    print(f"\n✓ Fetching: {url}\n")
     
     # Generate and display the summary
     display_summary(url)
